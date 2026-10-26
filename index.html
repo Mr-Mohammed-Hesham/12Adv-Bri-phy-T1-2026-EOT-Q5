@@ -1,0 +1,979 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>⚛️ القوة الكهروستاتيكية داخل الذرة - فيزياء 12 متقدم | Mr. Mohammed Hesham</title>
+<meta name="description" content="امتحان تفاعلي شامل عن القوة الكهروستاتيكية وقانون كولوم - فيزياء 12 متقدم">
+<meta name="author" content="Mr. Mohammed Hesham">
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&family=Amiri:wght@400;700&display=swap" rel="stylesheet">
+<style>
+body { font-family: 'Cairo', sans-serif; background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%); }
+body.en-mode { font-family: 'Inter', sans-serif; }
+.arabic-math { font-family: 'Amiri', 'Cairo', serif; }
+.correct { background-color: #dcfce7 !important; border-color: #16a34a !important; }
+.incorrect { background-color: #fee2e2 !important; border-color: #dc2626 !important; }
+.timer-warning { color: #dc2626 !important; animation: pulse 1s infinite; }
+@keyframes pulse { 50% { opacity: 0.7; } }
+@media print { .no-print { display: none !important; } }
+.success-badge { display: inline-block; padding: 4px 12px; border-radius: 20px; font-weight: bold; font-size: 0.875rem; }
+.grade-excellent { background: #dcfce7; color: #166534; }
+.grade-good { background: #fef3c7; color: #92400e; }
+.grade-pass { background: #dbeafe; color: #1e40af; }
+.grade-fail { background: #fee2e2; color: #991b1b; }
+.lang-switch { position: fixed; top: 16px; left: 16px; z-index: 100; background: white; padding: 6px; border-radius: 30px; box-shadow: 0 4px 15px rgba(0,0,0,0.15); display: flex; gap: 4px; border: 2px solid #d97706; }
+[dir="ltr"] .lang-switch { left: auto; right: 16px; }
+.lang-btn { padding: 6px 14px; border-radius: 20px; cursor: pointer; font-weight: bold; transition: all 0.3s; border: none; font-size: 0.875rem; background: transparent; color: #6b7280; }
+.lang-btn.active { background: #d97706; color: white; box-shadow: 0 2px 6px rgba(217,119,6,0.4); }
+.shuffle-badge { display: inline-block; background: linear-gradient(135deg, #d97706, #b45309); color: white; padding: 4px 12px; border-radius: 20px; font-size: 0.75rem; font-weight: bold; margin-right: 8px; }
+.math-display { display: inline-block; direction: ltr; font-family: 'Amiri', serif; font-size: 1.2em; padding: 2px 8px; background: #fef3c7; border-radius: 6px; margin: 2px; color: #92400e; font-weight: 600; }
+.save-indicator { position: fixed; bottom: 20px; left: 20px; z-index: 200; background: #10b981; color: white; padding: 8px 16px; border-radius: 20px; font-size: 0.8rem; font-weight: bold; opacity: 0; transition: opacity 0.3s; pointer-events: none; }
+.save-indicator.show { opacity: 1; }
+.formula-box { background: #fef3c7; border: 2px solid #f59e0b; border-radius: 8px; padding: 12px; margin: 10px 0; font-family: 'Amiri', serif; direction: ltr; text-align: center; }
+.svg-graph { display: block; margin: 12px auto; background: white; border: 2px solid #e5e7eb; border-radius: 12px; padding: 8px; }
+.graph-container { text-align: center; margin: 10px 0; }
+.module-badge { display: inline-block; padding: 4px 16px; border-radius: 20px; font-weight: bold; font-size: 0.85rem; margin-bottom: 8px; }
+.module-1 { background: #fef3c7; color: #92400e; }
+.module-2 { background: #dbeafe; color: #1e40af; }
+.module-3 { background: #fce7f3; color: #9f1239; }
+.module-4 { background: #ecfdf5; color: #065f46; }
+.module-5 { background: #ede9fe; color: #5b21b6; }
+.module-6 { background: #fee2e2; color: #991b1b; }
+</style>
+</head>
+<body class="p-4 md:p-8 min-h-screen">
+
+<div class="lang-switch no-print">
+<button class="lang-btn active" onclick="setLanguage('ar')" id="btn-ar">عربي</button>
+<button class="lang-btn" onclick="setLanguage('en')" id="btn-en">EN</button>
+</div>
+
+<div id="saveIndicator" class="save-indicator">💾 <span data-ar="تم الحفظ" data-en="Saved">تم الحفظ</span></div>
+
+<div id="timer-container" class="max-w-5xl mx-auto mb-4 text-center no-print">
+<div class="bg-white p-4 rounded-2xl shadow-lg inline-block border-2 border-amber-100">
+<span class="text-gray-600 ml-2">⏰ الوقت المتبقي:</span>
+<span id="timer" class="text-2xl font-bold text-amber-700 font-mono">90:00</span>
+<span class="shuffle-badge">⚛️ Coulomb's Law - 30 سؤال</span>
+</div>
+</div>
+
+<div class="max-w-5xl mx-auto mb-6 flex flex-wrap gap-3 justify-center no-print">
+<button onclick="toggleAnswers()" class="bg-amber-700 hover:bg-amber-800 text-white px-5 py-2 rounded-xl font-medium transition shadow">👀 إظهار/إخفاء الإجابات</button>
+<button onclick="window.print()" class="bg-gray-700 hover:bg-gray-900 text-white px-5 py-2 rounded-xl font-medium transition shadow">️ طباعة</button>
+<button onclick="reshuffleExam()" class="bg-gradient-to-r from-amber-700 to-orange-600 hover:from-amber-800 hover:to-orange-700 text-white px-5 py-2 rounded-xl font-medium transition shadow">🔄 أسئلة جديدة</button>
+<button onclick="clearProgress()" class="bg-red-500 hover:bg-red-600 text-white px-5 py-2 rounded-xl font-medium transition shadow">🗑️ مسح التقدم</button>
+</div>
+
+<header class="max-w-5xl mx-auto bg-white p-8 rounded-3xl shadow-2xl mb-8 border-4 border-amber-500">
+<div class="text-center">
+<div class="inline-block bg-amber-700 text-white px-6 py-2 rounded-full text-sm font-bold mb-4">PHYSICS 12 ADVANCED - EXAMPLE 1.2</div>
+<h1 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">️ القوة الكهروستاتيكية داخل الذرة</h1>
+<h2 class="text-xl text-amber-700 font-semibold mb-2">فيزياء 12 متقدم - قانون كولوم</h2>
+<p class="text-gray-600 mb-4">Coulomb's Law & Electrostatic Force in the Atom</p>
+<p class="text-sm text-green-600 font-semibold">💾 يتم حفظ تقدمك تلقائياً - 30 سؤالاً في 6 أقسام</p>
+</div>
+<div class="mt-6 flex flex-wrap justify-center gap-4 text-sm text-gray-600">
+<span>📅 التاريخ: <input type="text" id="examDate" class="border-b-2 border-amber-300 bg-transparent w-32 text-center"></span>
+<span>😊 الاسم: <input type="text" id="studentName" class="border-b-2 border-amber-300 bg-transparent w-40 text-center" placeholder="اكتب اسمك"></span>
+<span>🏫 الشعبة: <input type="text" id="studentClass" class="border-b-2 border-amber-300 bg-transparent w-32 text-center" placeholder="الشعبة"></span>
+<span>⏰ المدة: 90 دقيقة</span>
+<span>📊 المجموع: 100 درجة</span>
+</div>
+</header>
+
+<div class="max-w-5xl mx-auto mb-6 bg-white p-4 rounded-xl shadow-lg border-2 border-amber-200 no-print">
+<h3 class="font-bold text-lg mb-3 text-amber-800 text-center">📐 القوانين والثوابت الأساسية</h3>
+<div class="grid md:grid-cols-3 gap-3 text-sm">
+<div class="formula-box"><strong>Coulomb's Law:</strong> F = k|q₁q₂|/r²</div>
+<div class="formula-box"><strong>k = 8.99 × 10⁹ N·m²/C²</strong></div>
+<div class="formula-box"><strong>e = 1.60 × 10⁻¹⁹ C</strong><br>شحنة أولية</div>
+<div class="formula-box"><strong>Proton:</strong> q_p = +e</div>
+<div class="formula-box"><strong>Electron:</strong> q_e = -e</div>
+<div class="formula-box"><strong>Superposition:</strong> F_net = ΣF_i</div>
+</div>
+</div>
+
+<main class="max-w-5xl mx-auto space-y-8" id="exam-content"></main>
+
+<div class="text-center no-print pb-8 mt-8">
+<button onclick="gradeExam()" class="bg-gradient-to-r from-amber-700 to-orange-600 hover:from-amber-800 hover:to-orange-700 text-white text-lg px-12 py-4 rounded-2xl font-bold shadow-xl transition transform hover:scale-105">🎯 صحح إجاباتي!</button>
+</div>
+
+<div id="results-panel" class="max-w-5xl mx-auto mt-8 bg-white p-8 rounded-3xl shadow-2xl border-4 border-amber-500 hidden no-print">
+<h2 class="text-3xl font-bold text-gray-900 mb-6 text-center">🏆 نتيجتك يا بطل! 🏆</h2>
+<div class="grid md:grid-cols-3 gap-4 mb-6">
+<div class="bg-amber-50 p-4 rounded-xl text-center"><p>😊 الاسم</p><p id="res-name" class="font-bold text-xl text-amber-700">-</p></div>
+<div class="bg-orange-50 p-4 rounded-xl text-center"><p>📅 التاريخ</p><p id="res-date" class="font-bold text-xl text-orange-700">-</p></div>
+<div class="bg-amber-50 p-4 rounded-xl text-center"><p>🌟 المجموع</p><p id="res-total" class="font-bold text-3xl text-amber-700">0 / 100</p></div>
+</div>
+<div class="text-center mb-6">
+<span id="success-badge" class="success-badge grade-excellent">-</span>
+<p id="success-percent" class="text-4xl font-bold text-amber-700 mt-2">0%</p>
+<p class="text-sm text-gray-500">نسبة النجاح</p>
+</div>
+<div class="bg-gray-50 p-6 rounded-xl mb-6">
+<h3 class="font-bold text-lg mb-4 text-gray-800">📊 أدائك في كل قسم:</h3>
+<div class="space-y-3" id="sections-performance"></div>
+</div>
+<div class="text-center">
+<button id="sendEmailBtn" onclick="sendResultsToEmail()" class="bg-gradient-to-r from-amber-700 to-orange-600 text-white text-lg px-8 py-3 rounded-2xl font-bold shadow-xl transition">📧 أرسل النتيجة للمعلم</button>
+<p id="emailStatus" class="text-sm mt-2 text-center font-medium"></p>
+</div>
+</div>
+
+<footer class="max-w-5xl mx-auto mt-10 mb-8 text-center text-gray-500 text-sm no-print">
+© Electrostatic Force in Atom - Grade 12 | Mr. Mohammed Hesham ⚛️
+</footer>
+
+<script>
+const PUBLIC_KEY = "Rb3Lq8tXaFmc5YHUH";
+const SERVICE_ID = "service_w15m64i";
+const TEMPLATE_ID = "template_5b0u2tq";
+const TARGET_EMAIL = "mohammedhesham872@gmail.com";
+emailjs.init(PUBLIC_KEY);
+
+const STORAGE_KEY = 'coulomb_law_grade12_v1';
+const TOTAL_TIME = 5400;
+const TOTAL_QUESTIONS = 30;
+const TOTAL_SECTIONS = 6;
+const QUESTIONS_PER_SECTION = 5;
+
+let currentSeed = null;
+let answersVisible = false;
+let saveIndicatorTimeout = null;
+let currentLang = 'ar';
+let timeRemaining = TOTAL_TIME;
+let timerInterval;
+let examData;
+let correctAnswersMap = {};
+let rng = null;
+
+function mulberry32(a) {
+    return function() {
+        var t = a += 0x6D2B79F5;
+        t = Math.imul(t ^ t >>> 15, t | 1);
+        t ^= t + Math.imul(t ^ t >>> 7, t | 61);
+        return ((t ^ t >>> 14) >>> 0) / 4294967296;
+    }
+}
+
+function showSaveIndicator() {
+    const indicator = document.getElementById('saveIndicator');
+    indicator.classList.add('show');
+    if (saveIndicatorTimeout) clearTimeout(saveIndicatorTimeout);
+    saveIndicatorTimeout = setTimeout(() => indicator.classList.remove('show'), 1500);
+}
+
+function saveState(showIndicator = true) {
+    try {
+        const state = {
+            seed: currentSeed, lang: currentLang,
+            studentName: document.getElementById('studentName').value,
+            studentClass: document.getElementById('studentClass').value,
+            examDate: document.getElementById('examDate').value,
+            answers: getSelectedAnswers(),
+            timeRemaining: timeRemaining,
+            answersVisible: answersVisible, savedAt: Date.now()
+        };
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+        if (showIndicator) showSaveIndicator();
+    } catch (e) { console.error('Save error:', e); }
+}
+
+function loadState() {
+    try {
+        const saved = localStorage.getItem(STORAGE_KEY);
+        return saved ? JSON.parse(saved) : null;
+    } catch (e) { return null; }
+}
+
+function getSelectedAnswers() {
+    const answers = {};
+    for (let i = 0; i < TOTAL_QUESTIONS; i++) {
+        const selected = document.querySelector('input[name="q'+i+'"]:checked');
+        if (selected) answers[i] = selected.value;
+    }
+    return answers;
+}
+
+function restoreAnswers(answers) {
+    if (!answers) return;
+    for (const [idx, val] of Object.entries(answers)) {
+        const radio = document.querySelector('input[name="q'+idx+'"][value="'+val+'"]');
+        if (radio) radio.checked = true;
+    }
+}
+
+function clearProgress() {
+    const msg = currentLang === 'ar' ? '⚠️ هل أنت متأكد من مسح كل التقدم؟' : '⚠️ Clear all progress?';
+    if (confirm(msg)) { localStorage.removeItem(STORAGE_KEY); location.reload(); }
+}
+
+function setupAnswerListeners() {
+    document.getElementById('exam-content').addEventListener('change', (e) => {
+        if (e.target.type === 'radio') saveState();
+    });
+}
+
+function setupInputListeners() {
+    ['studentName', 'studentClass', 'examDate'].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) {
+            el.addEventListener('input', () => saveState(false));
+            el.addEventListener('blur', () => saveState());
+        }
+    });
+}
+
+// ==================== SVG Diagrams ====================
+const svgGraphs = {
+    helium_nucleus: `<svg class="svg-graph" width="400" height="260" viewBox="0 0 400 260" xmlns="http://www.w3.org/2000/svg">
+        <rect x="5" y="5" width="390" height="250" rx="12" fill="#fef3c7" stroke="#f59e0b" stroke-width="2"/>
+        <text x="200" y="25" text-anchor="middle" font-size="14" fill="#92400e" font-weight="bold">⚛️ نواة الهيليوم - Helium Nucleus</text>
+        <circle cx="150" cy="130" r="35" fill="#ef4444" stroke="#991b1b" stroke-width="2"/>
+        <text x="150" y="125" text-anchor="middle" font-size="12" fill="white" font-weight="bold">p⁺</text>
+        <text x="150" y="140" text-anchor="middle" font-size="10" fill="white">Proton 1</text>
+        <circle cx="250" cy="130" r="35" fill="#ef4444" stroke="#991b1b" stroke-width="2"/>
+        <text x="250" y="125" text-anchor="middle" font-size="12" fill="white" font-weight="bold">p⁺</text>
+        <text x="250" y="140" text-anchor="middle" font-size="10" fill="white">Proton 2</text>
+        <line x1="185" y1="130" x2="215" y2="130" stroke="#dc2626" stroke-width="3" marker-end="url(#arrow1)"/>
+        <line x1="215" y1="130" x2="185" y2="130" stroke="#dc2626" stroke-width="3" marker-end="url(#arrow2)"/>
+        <text x="200" y="115" text-anchor="middle" font-size="11" fill="#dc2626" font-weight="bold">r = 2×10⁻¹ m</text>
+        <text x="200" y="180" text-anchor="middle" font-size="11" fill="#92400e">F = k|q_p × q_p|/r²</text>
+        <text x="200" y="200" text-anchor="middle" font-size="11" fill="#92400e">F = (8.99×10)(1.6×10⁻¹)²/(2×10⁻¹)²</text>
+        <text x="200" y="225" text-anchor="middle" font-size="14" fill="#dc2626" font-weight="bold">F ≈ 58 N (Repulsive!)</text>
+        <text x="200" y="245" text-anchor="middle" font-size="10" fill="#92400e">Strong nuclear force holds them together</text>
+        <defs><marker id="arrow1" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto"><path d="M0,0 L0,6 L9,3 z" fill="#dc2626"/></marker>
+        <marker id="arrow2" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto"><path d="M0,0 L0,6 L9,3 z" fill="#dc2626"/></marker></defs>
+    </svg>`,
+    
+    gold_atom: `<svg class="svg-graph" width="400" height="280" viewBox="0 0 400 280" xmlns="http://www.w3.org/2000/svg">
+        <rect x="5" y="5" width="390" height="270" rx="12" fill="#dbeafe" stroke="#2563eb" stroke-width="2"/>
+        <text x="200" y="25" text-anchor="middle" font-size="14" fill="#1e40af" font-weight="bold">⚛️ ذرة الذهب - Gold Atom (Au, Z=79)</text>
+        <circle cx="200" cy="140" r="60" fill="#fbbf24" stroke="#f59e0b" stroke-width="3"/>
+        <text x="200" y="135" text-anchor="middle" font-size="11" fill="#92400e" font-weight="bold">Nucleus</text>
+        <text x="200" y="150" text-anchor="middle" font-size="10" fill="#92400e">+79e</text>
+        <circle cx="320" cy="140" r="10" fill="#3b82f6" stroke="#1e40af" stroke-width="2"/>
+        <text x="320" y="165" text-anchor="middle" font-size="9" fill="#1e40af">e⁻</text>
+        <line x1="260" y1="140" x2="310" y2="140" stroke="#dc2626" stroke-width="2" marker-end="url(#arrow3)"/>
+        <text x="285" y="130" text-anchor="middle" font-size="10" fill="#dc2626" font-weight="bold">r = 4.88×10⁻¹² m</text>
+        <text x="200" y="200" text-anchor="middle" font-size="11" fill="#1e40af">F = k|q_e × q_N|/r²</text>
+        <text x="200" y="220" text-anchor="middle" font-size="10" fill="#1e40af">q_e = -e, q_N = +79e</text>
+        <text x="200" y="245" text-anchor="middle" font-size="13" fill="#dc2626" font-weight="bold">F ≈ 7.63 × 10⁻ N</text>
+        <text x="200" y="265" text-anchor="middle" font-size="10" fill="#1e40af">Attractive force (opposite charges)</text>
+        <defs><marker id="arrow3" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto"><path d="M0,0 L0,6 L9,3 z" fill="#dc2626"/></marker></defs>
+    </svg>`,
+    
+    coulomb_law: `<svg class="svg-graph" width="400" height="240" viewBox="0 0 400 240" xmlns="http://www.w3.org/2000/svg">
+        <rect x="5" y="5" width="390" height="230" rx="12" fill="#fce7f3" stroke="#ec4899" stroke-width="2"/>
+        <text x="200" y="25" text-anchor="middle" font-size="14" fill="#9f1239" font-weight="bold">⚡ قانون كولوم - Coulomb's Law</text>
+        <circle cx="100" cy="130" r="25" fill="#ef4444" stroke="#991b1b" stroke-width="2"/>
+        <text x="100" y="135" text-anchor="middle" font-size="12" fill="white" font-weight="bold">q₁</text>
+        <circle cx="300" cy="130" r="25" fill="#3b82f6" stroke="#1e40af" stroke-width="2"/>
+        <text x="300" y="135" text-anchor="middle" font-size="12" fill="white" font-weight="bold">q₂</text>
+        <line x1="130" y1="130" x2="270" y2="130" stroke="#374151" stroke-width="2"/>
+        <text x="200" y="120" text-anchor="middle" font-size="11" fill="#374151" font-weight="bold">r (distance)</text>
+        <line x1="130" y1="130" x2="200" y2="130" stroke="#dc2626" stroke-width="3" marker-end="url(#arrow4)"/>
+        <line x1="270" y1="130" x2="200" y2="130" stroke="#2563eb" stroke-width="3" marker-end="url(#arrow5)"/>
+        <text x="200" y="180" text-anchor="middle" font-size="14" fill="#9f1239" font-family="'Amiri', serif" font-weight="bold">F = k|q₁q₂|/r²</text>
+        <text x="200" y="205" text-anchor="middle" font-size="11" fill="#9f1239">k = 8.99 × 10⁹ N·m²/C²</text>
+        <text x="200" y="220" text-anchor="middle" font-size="10" fill="#9f1239">Like charges repel, opposite attract</text>
+        <defs><marker id="arrow4" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto"><path d="M0,0 L0,6 L9,3 z" fill="#dc2626"/></marker>
+        <marker id="arrow5" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto"><path d="M0,0 L0,6 L9,3 z" fill="#2563eb"/></marker></defs>
+    </svg>`,
+    
+    three_charges: `<svg class="svg-graph" width="400" height="260" viewBox="0 0 400 260" xmlns="http://www.w3.org/2000/svg">
+        <rect x="5" y="5" width="390" height="250" rx="12" fill="#ecfdf5" stroke="#10b981" stroke-width="2"/>
+        <text x="200" y="25" text-anchor="middle" font-size="14" fill="#065f46" font-weight="bold">⚖️ ثلاث شحنات على خط - Three Charges on Line</text>
+        <line x1="50" y1="130" x2="370" y2="130" stroke="#374151" stroke-width="2"/>
+        <circle cx="100" cy="130" r="20" fill="#ef4444" stroke="#991b1b" stroke-width="2"/>
+        <text x="100" y="135" text-anchor="middle" font-size="11" fill="white" font-weight="bold">Q₁</text>
+        <text x="100" y="165" text-anchor="middle" font-size="10" fill="#065f46">x = a</text>
+        <circle cx="200" cy="130" r="20" fill="#3b82f6" stroke="#1e40af" stroke-width="2"/>
+        <text x="200" y="135" text-anchor="middle" font-size="11" fill="white" font-weight="bold">Q₂</text>
+        <text x="200" y="165" text-anchor="middle" font-size="10" fill="#065f46">x = ?</text>
+        <circle cx="300" cy="130" r="20" fill="#ef4444" stroke="#991b1b" stroke-width="2"/>
+        <text x="300" y="135" text-anchor="middle" font-size="11" fill="white" font-weight="bold">Q₃</text>
+        <text x="300" y="165" text-anchor="middle" font-size="10" fill="#065f46">x = 0</text>
+        <text x="200" y="200" text-anchor="middle" font-size="11" fill="#065f46">Find position where F_net on Q₂ = 0</text>
+        <text x="200" y="220" text-anchor="middle" font-size="11" fill="#065f46">Q₁ = Q₃, Q₂ = -4Q₁</text>
+        <text x="200" y="240" text-anchor="middle" font-size="12" fill="#dc2626" font-weight="bold">Answer: x = -2a</text>
+    </svg>`,
+    
+    force_comparison: `<svg class="svg-graph" width="400" height="240" viewBox="0 0 400 240" xmlns="http://www.w3.org/2000/svg">
+        <rect x="5" y="5" width="390" height="230" rx="12" fill="#ede9fe" stroke="#7c3aed" stroke-width="2"/>
+        <text x="200" y="25" text-anchor="middle" font-size="14" fill="#5b21b6" font-weight="bold">⚖️ مقارنة القوى - Force Comparison</text>
+        <rect x="20" y="50" width="170" height="80" rx="6" fill="#ddd6fe" stroke="#7c3aed" stroke-width="2"/>
+        <text x="105" y="75" text-anchor="middle" font-size="11" fill="#5b21b6" font-weight="bold">Electric Force</text>
+        <text x="105" y="95" text-anchor="middle" font-size="10" fill="#5b21b6">F_e = k|q₁q₂|/r²</text>
+        <text x="105" y="115" text-anchor="middle" font-size="10" fill="#5b21b6">Very strong</text>
+        <rect x="210" y="50" width="170" height="80" rx="6" fill="#ddd6fe" stroke="#7c3aed" stroke-width="2"/>
+        <text x="295" y="75" text-anchor="middle" font-size="11" fill="#5b21b6" font-weight="bold">Gravitational Force</text>
+        <text x="295" y="95" text-anchor="middle" font-size="10" fill="#5b21b6">F_g = Gm₁m₂/r²</text>
+        <text x="295" y="115" text-anchor="middle" font-size="10" fill="#5b21b6">Very weak</text>
+        <text x="200" y="160" text-anchor="middle" font-size="12" fill="#5b21b6" font-weight="bold">F_e / F_g ≈ 10³⁹ (for proton-electron)</text>
+        <text x="200" y="185" text-anchor="middle" font-size="11" fill="#5b21b6">Electric force is MUCH stronger than gravity</text>
+        <text x="200" y="210" text-anchor="middle" font-size="11" fill="#5b21b6">at atomic scales</text>
+    </svg>`,
+    
+    superposition: `<svg class="svg-graph" width="400" height="260" viewBox="0 0 400 260" xmlns="http://www.w3.org/2000/svg">
+        <rect x="5" y="5" width="390" height="250" rx="12" fill="#fee2e2" stroke="#dc2626" stroke-width="2"/>
+        <text x="200" y="25" text-anchor="middle" font-size="14" fill="#991b1b" font-weight="bold"> مبدأ التراكب - Superposition</text>
+        <circle cx="100" cy="130" r="20" fill="#ef4444" stroke="#991b1b" stroke-width="2"/>
+        <text x="100" y="135" text-anchor="middle" font-size="11" fill="white" font-weight="bold">q₁</text>
+        <circle cx="200" cy="80" r="20" fill="#3b82f6" stroke="#1e40af" stroke-width="2"/>
+        <text x="200" y="85" text-anchor="middle" font-size="11" fill="white" font-weight="bold">q₂</text>
+        <circle cx="300" cy="130" r="20" fill="#ef4444" stroke="#991b1b" stroke-width="2"/>
+        <text x="300" y="135" text-anchor="middle" font-size="11" fill="white" font-weight="bold">q₃</text>
+        <line x1="120" y1="130" x2="180" y2="90" stroke="#dc2626" stroke-width="2" marker-end="url(#arrow6)"/>
+        <line x1="280" y1="130" x2="220" y2="90" stroke="#dc2626" stroke-width="2" marker-end="url(#arrow7)"/>
+        <text x="150" y="105" font-size="10" fill="#dc2626" font-weight="bold">F₁₂</text>
+        <text x="250" y="105" font-size="10" fill="#dc2626" font-weight="bold">F₂</text>
+        <text x="200" y="180" text-anchor="middle" font-size="12" fill="#991b1b" font-weight="bold">F_net on q₂ = F₁₂ + F₃₂</text>
+        <text x="200" y="205" text-anchor="middle" font-size="11" fill="#991b1b">(Vector sum of all forces)</text>
+        <text x="200" y="230" text-anchor="middle" font-size="11" fill="#991b1b">Each pair interacts independently</text>
+        <defs><marker id="arrow6" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto"><path d="M0,0 L0,6 L9,3 z" fill="#dc2626"/></marker>
+        <marker id="arrow7" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto"><path d="M0,0 L0,6 L9,3 z" fill="#dc2626"/></marker></defs>
+    </svg>`
+};
+
+// ==================== EXAM DATA - 30 QUESTIONS ====================
+const originalExamData = {
+    sections: [
+        {
+            id: 'sec1',
+            title: { ar: '🔹 القسم 1: قانون كولوم (Q1-Q5)', en: '🔹 Section 1: Coulomb\'s Law (Q1-Q5)' },
+            questions: [
+                {
+                    q: { ar: 'ما صيغة قانون كولوم للقوة الكهروستاتيكية؟', en: 'What is Coulomb\'s Law formula for electrostatic force?' },
+                    svg: svgGraphs.coulomb_law,
+                    options: [
+                        { ar: '<span class="math-display">F = k|q₁q₂|/r²</span>', en: '<span class="math-display">F = k|q₁q₂|/r²</span>' },
+                        { ar: '<span class="math-display">F = kq₁q₂/r</span>', en: '<span class="math-display">F = kq₁q₂/r</span>' },
+                        { ar: '<span class="math-display">F = Gm₁m₂/r²</span>', en: '<span class="math-display">F = Gm₁m₂/r²</span>' },
+                        { ar: '<span class="math-display">F = qE</span>', en: '<span class="math-display">F = qE</span>' }
+                    ],
+                    correct: 0,
+                    answer: { ar: 'F = k|q₁q₂|/r² حيث k = 8.99×10⁹ N·m²/C²', en: 'F = k|q₁q₂|/r² where k = 8.99×10⁹ N·m²/C²' }
+                },
+                {
+                    q: { ar: 'ما قيمة ثابت كولوم k؟', en: 'What is the value of Coulomb\'s constant k?' },
+                    options: [
+                        { ar: '<span class="math-display">8.99 × 10 N·m²/C²</span>', en: '<span class="math-display">8.99 × 10⁹ N·m²/C²</span>' },
+                        { ar: '<span class="math-display">6.67 × 10¹¹ N·m²/kg²</span>', en: '<span class="math-display">6.67 × 10⁻¹¹ N·m²/kg²</span>' },
+                        { ar: '<span class="math-display">1.6 × 10⁻¹⁹ C</span>', en: '<span class="math-display">1.6 × 10⁻¹⁹ C</span>' },
+                        { ar: '<span class="math-display">9.11 × 10⁻³¹ kg</span>', en: '<span class="math-display">9.11 × 10³¹ kg</span>' }
+                    ],
+                    correct: 0,
+                    answer: { ar: 'k = 8.99 × 10⁹ N·m²/C² ≈ 9 × 10⁹ N·m²/C²', en: 'k = 8.99 × 10⁹ N·m²/C² ≈ 9 × 10⁹ N·m²/C²' }
+                },
+                {
+                    q: { ar: 'القوة الكهروستاتيكية تتناسب:', en: 'Electrostatic force is proportional to:' },
+                    options: [
+                        { ar: 'طردياً مع حاصل ضرب الشحنتين وعكسياً مع مربع المسافة', en: 'Directly to product of charges, inversely to square of distance' },
+                        { ar: 'طردياً مع المسافة', en: 'Directly to distance' },
+                        { ar: 'عكسياً مع الشحنة', en: 'Inversely to charge' },
+                        { ar: 'طردياً مع مربع المسافة', en: 'Directly to square of distance' }
+                    ],
+                    correct: 0,
+                    answer: { ar: 'F ∝ |q₁q₂|/r² (طردي مع الشحنتين، عكسي مع مربع المسافة)', en: 'F ∝ |q₁q₂|/r² (direct to charges, inverse to distance squared)' }
+                },
+                {
+                    q: { ar: 'إذا تضاعفت المسافة بين شحنتين، فإن القوة الكهروستاتيكية:', en: 'If distance between two charges doubles, electrostatic force:' },
+                    options: [
+                        { ar: 'تقل إلى الربع (1/4)', en: 'Decreases to one-fourth (1/4)' },
+                        { ar: 'تضاعف', en: 'Doubles' },
+                        { ar: 'تقل إلى النصف', en: 'Decreases to half' },
+                        { ar: 'تزداد 4 أضعاف', en: 'Increases 4 times' }
+                    ],
+                    correct: 0,
+                    answer: { ar: 'F ∝ 1/r²، إذا r → 2r فإن F → F/4', en: 'F ∝ 1/r², if r → 2r then F → F/4' }
+                },
+                {
+                    q: { ar: 'إذا تضاعفت إحدى الشحنتين، فإن القوة:', en: 'If one charge doubles, force:' },
+                    options: [
+                        { ar: 'تتضاعف', en: 'Doubles' },
+                        { ar: 'تقل إلى النصف', en: 'Halves' },
+                        { ar: 'تبقى كما هي', en: 'Stays same' },
+                        { ar: 'تزداد 4 أضعاف', en: 'Increases 4 times' }
+                    ],
+                    correct: 0,
+                    answer: { ar: 'F ∝ q₁q₂، مضاعفة شحنة واحدة تضاعف القوة', en: 'F ∝ q₁q₂, doubling one charge doubles force' }
+                }
+            ]
+        },
+        {
+            id: 'sec2',
+            title: { ar: '🔹 القسم 2: القوة داخل نواة الهيليوم (Q6-Q10)', en: '🔹 Section 2: Force in Helium Nucleus (Q6-Q10)' },
+            questions: [
+                {
+                    q: { ar: 'ما شحنة البروتون؟', en: 'What is the charge of a proton?' },
+                    svg: svgGraphs.helium_nucleus,
+                    options: [
+                        { ar: '<span class="math-display">+1.6 × 10⁻¹⁹ C</span>', en: '<span class="math-display">+1.6 × 10¹⁹ C</span>' },
+                        { ar: '<span class="math-display">-1.6 × 10⁻¹⁹ C</span>', en: '<span class="math-display">-1.6 × 10⁻¹⁹ C</span>' },
+                        { ar: '<span class="math-display">0 C</span>', en: '<span class="math-display">0 C</span>' },
+                        { ar: '<span class="math-display">+3.2 × 10⁻¹⁹ C</span>', en: '<span class="math-display">+3.2 × 10⁻¹⁹ C</span>' }
+                    ],
+                    correct: 0,
+                    answer: { ar: 'q_p = +e = +1.6 × 10⁻¹⁹ C', en: 'q_p = +e = +1.6 × 10⁻¹⁹ C' }
+                },
+                {
+                    q: { ar: 'المسافة بين بروتونين في نواة الهيليوم تقريباً:', en: 'Distance between two protons in helium nucleus is approximately:' },
+                    options: [
+                        { ar: '<span class="math-display">2 × 10⁻¹⁵ m</span>', en: '<span class="math-display">2 × 10⁻¹⁵ m</span>' },
+                        { ar: '<span class="math-display">2 × 10⁻¹ m</span>', en: '<span class="math-display">2 × 10⁻¹⁰ m</span>' },
+                        { ar: '<span class="math-display">4.88 × 10⁻¹² m</span>', en: '<span class="math-display">4.88 × 10⁻¹² m</span>' },
+                        { ar: '<span class="math-display">1 × 10⁻¹⁵ m</span>', en: '<span class="math-display">1 × 10⁻¹⁵ m</span>' }
+                    ],
+                    correct: 0,
+                    answer: { ar: 'r ≈ 2 × 10⁻¹ m (2 فيمتومتر)', en: 'r ≈ 2 × 10⁻¹⁵ m (2 femtometers)' }
+                },
+                {
+                    q: { ar: 'القوة الكهروستاتيكية بين بروتونين في نواة الهيليوم:', en: 'Electrostatic force between two protons in helium nucleus:' },
+                    options: [
+                        { ar: '<span class="math-display">≈ 58 N</span> (تنافر)', en: '<span class="math-display">≈ 58 N</span> (repulsive)' },
+                        { ar: '<span class="math-display">≈ 5.8 N</span>', en: '<span class="math-display">≈ 5.8 N</span>' },
+                        { ar: '<span class="math-display">≈ 580 N</span>', en: '<span class="math-display">≈ 580 N</span>' },
+                        { ar: '<span class="math-display">≈ 0.58 N</span>', en: '<span class="math-display">≈ 0.58 N</span>' }
+                    ],
+                    correct: 0,
+                    answer: { ar: 'F = k(e)²/r² = (8.99×10⁹)(1.6×10⁻¹⁹)²/(2×10⁻¹⁵)² ≈ 58 N', en: 'F = k(e)²/r² = (8.99×10⁹)(1.6×10⁻¹⁹)²/(2×10⁻¹⁵)² ≈ 58 N' }
+                },
+                {
+                    q: { ar: 'نوع القوة بين بروتونين في النواة:', en: 'Type of force between two protons in nucleus:' },
+                    options: [
+                        { ar: 'قوة تنافر كهروستاتيكية (لأن كلاهما موجب)', en: 'Electrostatic repulsion (both positive)' },
+                        { ar: 'قوة تجاذب', en: 'Attraction' },
+                        { ar: 'قوة جاذبية فقط', en: 'Gravity only' },
+                        { ar: 'لا توجد قوة', en: 'No force' }
+                    ],
+                    correct: 0,
+                    answer: { ar: 'البروتونات موجبة الشحنة → تتنافر كهربائياً، لكن القوة النووية الشديدة تربطها', en: 'Protons are positive → repel electrically, but strong nuclear force binds them' }
+                },
+                {
+                    q: { ar: 'لماذا لا تتفكك النواة رغم التنافر الكهربائي الكبير بين البروتونات؟', en: 'Why doesn\'t nucleus disintegrate despite large electric repulsion between protons?' },
+                    options: [
+                        { ar: 'لأن القوة النووية الشديدة أقوى من التنافر الكهربائي', en: 'Because strong nuclear force is stronger than electric repulsion' },
+                        { ar: 'لأن البروتونات متعادلة', en: 'Because protons are neutral' },
+                        { ar: 'لأن القوة الكهربائية ضعيفة', en: 'Because electric force is weak' },
+                        { ar: 'لا سبب', en: 'No reason' }
+                    ],
+                    correct: 0,
+                    answer: { ar: 'القوة النووية الشديدة (Strong Nuclear Force) تربط النيوكليونات معاً وهي أقوى بكثير من التنافر الكهربائي', en: 'Strong Nuclear Force binds nucleons together and is much stronger than electric repulsion' }
+                }
+            ]
+        },
+        {
+            id: 'sec3',
+            title: { ar: '🔹 القسم 3: ذرة الذهب (Q11-Q15)', en: '🔹 Section 3: Gold Atom (Q11-Q15)' },
+            questions: [
+                {
+                    q: { ar: 'ما العدد الذري للذهب (Au)؟', en: 'What is the atomic number of gold (Au)?' },
+                    svg: svgGraphs.gold_atom,
+                    options: [
+                        { ar: '<span class="math-display">Z = 79</span>', en: '<span class="math-display">Z = 79</span>' },
+                        { ar: '<span class="math-display">Z = 26</span>', en: '<span class="math-display">Z = 26</span>' },
+                        { ar: '<span class="math-display">Z = 92</span>', en: '<span class="math-display">Z = 92</span>' },
+                        { ar: '<span class="math-display">Z = 6</span>', en: '<span class="math-display">Z = 6</span>' }
+                    ],
+                    correct: 0,
+                    answer: { ar: 'العدد الذري للذهب Z = 79 (79 بروتون في النواة)', en: 'Atomic number of gold Z = 79 (79 protons in nucleus)' }
+                },
+                {
+                    q: { ar: 'شحنة نواة الذهب:', en: 'Charge of gold nucleus:' },
+                    options: [
+                        { ar: '<span class="math-display">+79e</span>', en: '<span class="math-display">+79e</span>' },
+                        { ar: '<span class="math-display">-79e</span>', en: '<span class="math-display">-79e</span>' },
+                        { ar: '<span class="math-display">+e</span>', en: '<span class="math-display">+e</span>' },
+                        { ar: '<span class="math-display">0</span>', en: '<span class="math-display">0</span>' }
+                    ],
+                    correct: 0,
+                    answer: { ar: 'q_N = +Ze = +79e (لأن النواة تحتوي 79 بروتون)', en: 'q_N = +Ze = +79e (nucleus contains 79 protons)' }
+                },
+                {
+                    q: { ar: 'شحنة الإلكترون:', en: 'Charge of electron:' },
+                    options: [
+                        { ar: '<span class="math-display">-e = -1.6 × 10⁻¹⁹ C</span>', en: '<span class="math-display">-e = -1.6 × 10⁻¹⁹ C</span>' },
+                        { ar: '<span class="math-display">+e</span>', en: '<span class="math-display">+e</span>' },
+                        { ar: '<span class="math-display">0</span>', en: '<span class="math-display">0</span>' },
+                        { ar: '<span class="math-display">-2e</span>', en: '<span class="math-display">-2e</span>' }
+                    ],
+                    correct: 0,
+                    answer: { ar: 'q_e = -e = -1.6 × 10⁻¹⁹ C', en: 'q_e = -e = -1.6 × 10⁻¹⁹ C' }
+                },
+                {
+                    q: { ar: 'نوع القوة بين الإلكترون ونواة الذهب:', en: 'Type of force between electron and gold nucleus:' },
+                    options: [
+                        { ar: 'قوة تجاذب (لأن الشحنات مختلفة)', en: 'Attractive (opposite charges)' },
+                        { ar: 'قوة تنافر', en: 'Repulsive' },
+                        { ar: 'لا توجد قوة', en: 'No force' },
+                        { ar: 'قوة نووية', en: 'Nuclear force' }
+                    ],
+                    correct: 0,
+                    answer: { ar: 'الإلكترون سالب والنواة موجبة → قوة تجاذب كهروستاتيكية', en: 'Electron negative, nucleus positive → electrostatic attraction' }
+                },
+                {
+                    q: { ar: 'القوة الكهروستاتيكية بين إلكترون ومداره في ذرة الذهب (r = 4.88×10⁻¹² m):', en: 'Electrostatic force between electron and its orbit in gold atom (r = 4.88×10⁻¹² m):' },
+                    options: [
+                        { ar: '<span class="math-display">≈ 7.63 × 10⁻⁴ N</span>', en: '<span class="math-display">≈ 7.63 × 10⁻⁴ N</span>' },
+                        { ar: '<span class="math-display">≈ 58 N</span>', en: '<span class="math-display">≈ 58 N</span>' },
+                        { ar: '<span class="math-display">≈ 7.63 × 10⁴ N</span>', en: '<span class="math-display">≈ 7.63 × 10⁴ N</span>' },
+                        { ar: '<span class="math-display">≈ 1 N</span>', en: '<span class="math-display">≈ 1 N</span>' }
+                    ],
+                    correct: 0,
+                    answer: { ar: 'F = k|q_e × q_N|/r² = (8.99×10⁹)(1.6×10⁻¹⁹)(79×1.6×10⁻¹⁹)/(4.88×10¹²)² ≈ 7.63×10⁻⁴ N', en: 'F = k|q_e × q_N|/r² ≈ 7.63×10⁻⁴ N' }
+                }
+            ]
+        },
+        {
+            id: 'sec4',
+            title: { ar: ' القسم 4: مبدأ التراكب وموضع الشحنة (Q16-Q20)', en: '🔹 Section 4: Superposition & Charge Position (Q16-Q20)' },
+            questions: [
+                {
+                    q: { ar: 'مبدأ التراكب للقوى الكهربائية يعني:', en: 'Superposition principle for electric forces means:' },
+                    svg: svgGraphs.superposition,
+                    options: [
+                        { ar: 'القوة المحصلة = المجموع الاتجاهي للقوى الفردية', en: 'Net force = vector sum of individual forces' },
+                        { ar: 'القوة المحصلة = متوسط القوى', en: 'Net force = average of forces' },
+                        { ar: 'القوة المحصلة = أكبر قوة فقط', en: 'Net force = largest force only' },
+                        { ar: 'القوى تلغي بعضها دائماً', en: 'Forces always cancel' }
+                    ],
+                    correct: 0,
+                    answer: { ar: 'F_net = F₁ + F₂ + F₃ + ... (مجموع اتجاهي لجميع القوى)', en: 'F_net = F₁ + F₂ + F₃ + ... (vector sum of all forces)' }
+                },
+                {
+                    q: { ar: 'شحنة Q₁ عند x = a، وشحنة Q₃ = Q₁ عند x = 0. أين نضع Q₂ = -4Q₁ لتكون محصلة القوى على Q₃ صفراً؟', en: 'Charge Q₁ at x = a, Q₃ = Q₁ at x = 0. Where to place Q₂ = -4Q₁ so net force on Q₃ = 0?' },
+                    svg: svgGraphs.three_charges,
+                    options: [
+                        { ar: '<span class="math-display">x = -2a</span>', en: '<span class="math-display">x = -2a</span>' },
+                        { ar: '<span class="math-display">x = 2a</span>', en: '<span class="math-display">x = 2a</span>' },
+                        { ar: '<span class="math-display">x = -a</span>', en: '<span class="math-display">x = -a</span>' },
+                        { ar: '<span class="math-display">x = a/2</span>', en: '<span class="math-display">x = a/2</span>' }
+                    ],
+                    correct: 0,
+                    answer: { ar: 'لكي تلغي Q₂ قوة Q₁ على Q₃: k|Q₁Q|/a² = k|Q₂Q₃|/x² → x² = 4a² → x = -2a (على اليسار)', en: 'For Q₂ to cancel Q₁ force on Q₃: x² = 4a² → x = -2a (on left side)' }
+                },
+                {
+                    q: { ar: 'في المسألة السابقة، لماذا نضع Q₂ عند x = -2a وليس x = +2a؟', en: 'In previous problem, why place Q₂ at x = -2a not x = +2a?' },
+                    options: [
+                        { ar: 'لأن Q₂ سالبة (-4Q₁) فتجذب Q₃ الموجبة، ويجب أن تكون في اتجاه معاكس لـ Q₁', en: 'Because Q₂ is negative (-4Q₁) attracting positive Q₃, must be opposite direction to Q₁' },
+                        { ar: 'لأن x = +2a أبعد', en: 'Because x = +2a is farther' },
+                        { ar: 'لا فرق', en: 'No difference' },
+                        { ar: 'لأن Q₂ موجبة', en: 'Because Q₂ is positive' }
+                    ],
+                    correct: 0,
+                    answer: { ar: 'Q₂ = -4Q₁ (سالبة) تجذب Q₃ (الموجبة). Q₁ = Q₃ (موجبة) تدفع Q₃. يجب أن تكون القوتان متعاكستين في الاتجاه', en: 'Q₂ = -4Q₁ (negative) attracts Q₃ (positive). Q₁ = Q₃ (positive) repels Q₃. Forces must be opposite' }
+                },
+                {
+                    q: { ar: 'إذا كانت Q₁ = Q₃ = +1 μC و Q₂ = -4 μC و a = 1 m، فما قوة Q₁ على Q؟', en: 'If Q₁ = Q = +1 μC, Q₂ = -4 μC, a = 1 m, what is force of Q₁ on Q₃?' },
+                    options: [
+                        { ar: '<span class="math-display">9 × 10⁻³ N</span> (تنافر)', en: '<span class="math-display">9 × 10³ N</span> (repulsive)' },
+                        { ar: '<span class="math-display">9 × 10³ N</span>', en: '<span class="math-display">9 × 10³ N</span>' },
+                        { ar: '<span class="math-display">36 × 10⁻³ N</span>', en: '<span class="math-display">36 × 10⁻³ N</span>' },
+                        { ar: '<span class="math-display">0 N</span>', en: '<span class="math-display">0 N</span>' }
+                    ],
+                    correct: 0,
+                    answer: { ar: 'F = kQ₁Q/a² = (9×10⁹)(1×10⁻⁶)(1×10⁻⁶)/1² = 9×10⁻³ N (تنافر)', en: 'F = kQ₁Q₃/a² = (9×10⁹)(1×10⁻⁶)(1×10⁻⁶)/1² = 9×10⁻³ N (repulsive)' }
+                },
+                {
+                    q: { ar: 'في أي حالة تكون محصلة القوى على شحنة Q أكبر ما يمكن؟', en: 'In which case is net force on charge Q maximum?' },
+                    options: [
+                        { ar: 'Q = 1C على بعد 1m من شحنة -2C', en: 'Q = 1C at 1m from -2C charge' },
+                        { ar: 'Q = 1C على بعد 0.5m من شحنة -1C', en: 'Q = 1C at 0.5m from -1C charge' },
+                        { ar: 'Q = 1C في منتصف المسافة بين شحنتي -1C و +1C (المسافة 2m)', en: 'Q = 1C midway between -1C and +1C (distance 2m)' },
+                        { ar: 'Q = 1C على بعد 2m من شحنة -4C', en: 'Q = 1C at 2m from -4C charge' }
+                    ],
+                    correct: 1,
+                    answer: { ar: 'الحالة (b): F = k(1)(1)/(0.5)² = 4k = 36×10⁹ N (الأكبر لأن المسافة أصغر)', en: 'Case (b): F = k(1)(1)/(0.5)² = 4k = 36×10⁹ N (largest due to smallest distance)' }
+                }
+            ]
+        },
+        {
+            id: 'sec5',
+            title: { ar: '🔹 القسم 5: تطبيقات على الذرة (Q21-Q25)', en: '🔹 Section 5: Atomic Applications (Q21-Q25)' },
+            questions: [
+                {
+                    q: { ar: 'القوة الكهروستاتيكية بين البروتون والإلكترون في ذرة الهيدروجين (r = 5.3×10⁻¹¹ m):', en: 'Electrostatic force between proton and electron in hydrogen atom (r = 5.3×10⁻¹¹ m):' },
+                    options: [
+                        { ar: '<span class="math-display">≈ 8.2 × 10⁻⁸ N</span>', en: '<span class="math-display">≈ 8.2 × 10⁻⁸ N</span>' },
+                        { ar: '<span class="math-display">≈ 58 N</span>', en: '<span class="math-display">≈ 58 N</span>' },
+                        { ar: '<span class="math-display">≈ 3.6 × 10⁻⁴⁷ N</span>', en: '<span class="math-display">≈ 3.6 × 10⁻⁴⁷ N</span>' },
+                        { ar: '<span class="math-display">≈ 9 × 10 N</span>', en: '<span class="math-display">≈ 9 × 10⁹ N</span>' }
+                    ],
+                    correct: 0,
+                    answer: { ar: 'F = ke²/r² = (9×10⁹)(1.6×10⁻¹⁹)²/(5.3×10⁻¹¹)² ≈ 8.2×10⁻⁸ N', en: 'F = ke²/r² = (9×10⁹)(1.6×10⁻¹⁹)²/(5.3×10¹¹)² ≈ 8.2×10⁻⁸ N' }
+                },
+                {
+                    q: { ar: 'قوة الجاذبية بين البروتون والإلكترون في ذرة الهيدروجين:', en: 'Gravitational force between proton and electron in hydrogen atom:' },
+                    svg: svgGraphs.force_comparison,
+                    options: [
+                        { ar: '<span class="math-display">≈ 3.6 × 10⁻⁴⁷ N</span>', en: '<span class="math-display">≈ 3.6 × 10⁻⁴⁷ N</span>' },
+                        { ar: '<span class="math-display">≈ 8.2 × 10⁻⁸ N</span>', en: '<span class="math-display">≈ 8.2 × 10⁻⁸ N</span>' },
+                        { ar: '<span class="math-display">≈ 58 N</span>', en: '<span class="math-display">≈ 58 N</span>' },
+                        { ar: '<span class="math-display">≈ 1 N</span>', en: '<span class="math-display">≈ 1 N</span>' }
+                    ],
+                    correct: 0,
+                    answer: { ar: 'F_g = Gm_pm_e/r² ≈ 3.6 × 10⁻⁴⁷ N (ضعيفة جداً مقارنة بالقوة الكهربائية)', en: 'F_g = Gm_pm_e/r² ≈ 3.6 × 10⁻⁴ N (very weak compared to electric force)' }
+                },
+                {
+                    q: { ar: 'النسبة بين القوة الكهربائية وقوة الجاذبية في ذرة الهيدروجين:', en: 'Ratio of electric force to gravitational force in hydrogen atom:' },
+                    options: [
+                        { ar: '<span class="math-display">≈ 2.3 × 10³⁹</span>', en: '<span class="math-display">≈ 2.3 × 10³⁹</span>' },
+                        { ar: '<span class="math-display">≈ 1</span>', en: '<span class="math-display">≈ 1</span>' },
+                        { ar: '<span class="math-display">≈ 10²⁰</span>', en: '<span class="math-display">≈ 10²⁰</span>' },
+                        { ar: '<span class="math-display">≈ 10¹⁰</span>', en: '<span class="math-display">≈ 10¹⁰</span>' }
+                    ],
+                    correct: 0,
+                    answer: { ar: 'F_e/F_g ≈ 2.3 × 10³⁹ (القوة الكهربائية أقوى بـ 10³⁹ مرة!)', en: 'F_e/F_g ≈ 2.3 × 10³⁹ (electric force is 10³⁹ times stronger!)' }
+                },
+                {
+                    q: { ar: 'لماذا تُهمل قوة الجاذبية في التفاعلات الذرية؟', en: 'Why is gravitational force neglected in atomic interactions?' },
+                    options: [
+                        { ar: 'لأنها أضعف بكثير من القوة الكهروستاتيكية (بحوالي 10³⁹ مرة)', en: 'Because it is much weaker than electrostatic force (by ~10³⁹ times)' },
+                        { ar: 'لأنها لا توجد', en: 'Because it does not exist' },
+                        { ar: 'لأنها أقوى من الكهربائية', en: 'Because it is stronger than electric' },
+                        { ar: 'لأن الذرات ليس لها كتلة', en: 'Because atoms have no mass' }
+                    ],
+                    correct: 0,
+                    answer: { ar: 'قوة الجاذبية أضعف بـ 10³⁹ مرة من القوة الكهربائية على المستوى الذري', en: 'Gravitational force is 10³⁹ times weaker than electric force at atomic scale' }
+                },
+                {
+                    q: { ar: 'في نواة تحتوي على 100000 بروتون، القوة على إلكترون في المدار الأول تكون:', en: 'In nucleus with 100000 protons, force on electron in first orbit:' },
+                    options: [
+                        { ar: '100000 ضعف القوة في ذرة الهيدروجين', en: '100000 times force in hydrogen atom' },
+                        { ar: 'نفس القوة', en: 'Same force' },
+                        { ar: '1/100000 من القوة', en: '1/100000 of force' },
+                        { ar: 'صفر', en: 'Zero' }
+                    ],
+                    correct: 0,
+                    answer: { ar: 'F ∝ Z (عدد البروتونات)، لذا القوة = 100000 × F_hydrogen', en: 'F ∝ Z (number of protons), so force = 100000 × F_hydrogen' }
+                }
+            ]
+        },
+        {
+            id: 'sec6',
+            title: { ar: '🔹 القسم 6: مسائل متقدمة (Q26-Q30)', en: '🔹 Section 6: Advanced Problems (Q26-Q30)' },
+            questions: [
+                {
+                    q: { ar: 'شحنتان q₁ = +2 μC و q₂ = -3 μC على بعد 0.1 m. ما القوة بينهما؟', en: 'Two charges q₁ = +2 μC and q₂ = -3 μC at 0.1 m. Force between them?' },
+                    options: [
+                        { ar: '<span class="math-display">5.4 N</span> (تجاذب)', en: '<span class="math-display">5.4 N</span> (attractive)' },
+                        { ar: '<span class="math-display">5.4 N</span> (تنافر)', en: '<span class="math-display">5.4 N</span> (repulsive)' },
+                        { ar: '<span class="math-display">0.54 N</span>', en: '<span class="math-display">0.54 N</span>' },
+                        { ar: '<span class="math-display">54 N</span>', en: '<span class="math-display">54 N</span>' }
+                    ],
+                    correct: 0,
+                    answer: { ar: 'F = k|q₁q₂|/r² = (9×10⁹)(2×10⁶)(3×10⁻⁶)/(0.1)² = 5.4 N (تجاذب لأن الشحنات مختلفة)', en: 'F = k|q₁q₂|/r² = (9×10⁹)(2×10⁻⁶)(3×10⁻⁶)/(0.1)² = 5.4 N (attractive, opposite charges)' }
+                },
+                {
+                    q: { ar: 'ثلاث شحنات متساوية +q عند رؤوس مثلث متساوي الأضلاع طول ضلعه a. القوة على كل شحنة:', en: 'Three equal charges +q at vertices of equilateral triangle side a. Force on each charge:' },
+                    options: [
+                        { ar: '<span class="math-display">√3 kq²/a²</span>', en: '<span class="math-display">√3 kq²/a²</span>' },
+                        { ar: '<span class="math-display">kq²/a²</span>', en: '<span class="math-display">kq²/a²</span>' },
+                        { ar: '<span class="math-display">2kq²/a²</span>', en: '<span class="math-display">2kq²/a²</span>' },
+                        { ar: '<span class="math-display">3kq²/a²</span>', en: '<span class="math-display">3kq²/a²</span>' }
+                    ],
+                    correct: 0,
+                    answer: { ar: 'F = √(F₁² + F₂² + 2F₁F₂cos60°) = √3 kq²/a²', en: 'F = (F₁² + F₂² + 2F₁F₂cos60°) = √3 kq²/a²' }
+                },
+                {
+                    q: { ar: 'إلكترون في مجال كهربائي 1000 N/C. ما القوة عليه؟', en: 'Electron in electric field 1000 N/C. Force on it?' },
+                    options: [
+                        { ar: '<span class="math-display">1.6 × 10⁻¹ N</span>', en: '<span class="math-display">1.6 × 10⁻¹⁶ N</span>' },
+                        { ar: '<span class="math-display">1.6 × 10⁻¹⁹ N</span>', en: '<span class="math-display">1.6 × 10⁻¹⁹ N</span>' },
+                        { ar: '<span class="math-display">1000 N</span>', en: '<span class="math-display">1000 N</span>' },
+                        { ar: '<span class="math-display">1.6 × 10¹³ N</span>', en: '<span class="math-display">1.6 × 10⁻¹³ N</span>' }
+                    ],
+                    correct: 0,
+                    answer: { ar: 'F = qE = (1.6×10⁻¹⁹)(1000) = 1.6×10¹⁶ N', en: 'F = qE = (1.6×10⁻¹⁹)(1000) = 1.6×10⁻¹⁶ N' }
+                },
+                {
+                    q: { ar: 'شحنتان +4 μC و +9 μC على بعد 3 m. أين تكون شحنة ثالثة في حالة اتزان؟', en: 'Charges +4 μC and +9 μC at 3 m apart. Where is third charge in equilibrium?' },
+                    options: [
+                        { ar: '<span class="math-display">1.2 m</span> من الشحنة +4 μC', en: '<span class="math-display">1.2 m</span> from +4 μC charge' },
+                        { ar: '<span class="math-display">1.5 m</span> من المنتصف', en: '<span class="math-display">1.5 m</span> from midpoint' },
+                        { ar: '<span class="math-display">1.8 m</span> من +4 μC', en: '<span class="math-display">1.8 m</span> from +4 μC' },
+                        { ar: '<span class="math-display">2 m</span> من +4 μC', en: '<span class="math-display">2 m</span> from +4 μC' }
+                    ],
+                    correct: 0,
+                    answer: { ar: '√4/x = 9/(3-x) → 2/x = 3/(3-x) → x = 1.2 m من +4 μC', en: '√4/x = √9/(3-x) → 2/x = 3/(3-x) → x = 1.2 m from +4 μC' }
+                },
+                {
+                    q: { ar: 'القوة الكهروستاتيكية هي قوة:', en: 'Electrostatic force is a:' },
+                    options: [
+                        { ar: 'قوة محافظة (Conservative force)', en: 'Conservative force' },
+                        { ar: 'قوة غير محافظة', en: 'Non-conservative force' },
+                        { ar: 'قوة احتكاك', en: 'Friction force' },
+                        { ar: 'قوة نووية فقط', en: 'Nuclear force only' }
+                    ],
+                    correct: 0,
+                    answer: { ar: 'القوة الكهروستاتيكية قوة محافظة (الشغل لا يعتمد على المسار)', en: 'Electrostatic force is conservative (work independent of path)' }
+                }
+            ]
+        }
+    ]
+};
+
+function shuffleArray(array) {
+    const arr = [...array];
+    for (let i = arr.length - 1; i > 0; i--) {
+        const j = Math.floor(rng() * (i + 1));
+        [arr[i], arr[j]] = [arr[j], arr[i]];
+    }
+    return arr;
+}
+
+function prepareShuffledExam() {
+    rng = mulberry32(currentSeed);
+    examData = JSON.parse(JSON.stringify(originalExamData));
+    correctAnswersMap = {};
+    let globalIdx = 0;
+    examData.sections.forEach((section) => {
+        section.questions = shuffleArray(section.questions);
+        section.questions.forEach((q) => {
+            const optionsWithCorrect = q.options.map((opt, idx) => ({ option: opt, isCorrect: idx === q.correct }));
+            const shuffledOptions = shuffleArray(optionsWithCorrect);
+            q.options = shuffledOptions.map(o => o.option);
+            q.correct = shuffledOptions.findIndex(o => o.isCorrect);
+            correctAnswersMap[globalIdx] = String.fromCharCode(97 + q.correct);
+            globalIdx++;
+        });
+    });
+}
+
+function reshuffleExam() {
+    const msg = currentLang === 'ar' ? '🔄 سيتم إنشاء أسئلة جديدة ومسح إجاباتك. هل أنت متأكد؟' : '🔄 New questions will be generated. Are you sure?';
+    if (confirm(msg)) {
+        currentSeed = Date.now(); timeRemaining = TOTAL_TIME; answersVisible = false;
+        prepareShuffledExam(); renderExam(); saveState();
+        alert(currentLang === 'ar' ? '🎲 تم تغيير الأسئلة! حظاً موفقاً! 🍀' : '🎲 Questions changed! Good luck! ');
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+}
+
+function setLanguage(lang) {
+    currentLang = lang;
+    document.documentElement.lang = lang;
+    document.documentElement.dir = lang === 'ar' ? 'rtl' : 'ltr';
+    document.getElementById('btn-ar').classList.toggle('active', lang === 'ar');
+    document.getElementById('btn-en').classList.toggle('active', lang === 'en');
+    document.body.classList.toggle('en-mode', lang === 'en');
+    renderExam(); saveState(false);
+}
+
+function renderExam() {
+    const container = document.getElementById('exam-content');
+    const labels = { ar: { option: ['أ', 'ب', 'ج', 'د'], answer: '✅ الإجابة:' }, en: { option: ['A', 'B', 'C', 'D'], answer: '✅ Answer:' } };
+    const lbl = labels[currentLang];
+    let html = '';
+    let globalIdx = 0;
+    
+    examData.sections.forEach((section, secIdx) => {
+        const badgeClass = ['module-1', 'module-2', 'module-3', 'module-4', 'module-5', 'module-6'][secIdx];
+        html += '<section class="bg-white p-6 rounded-2xl shadow-lg border-2 border-amber-100">';
+        html += '<div class="text-center mb-4"><span class="module-badge ' + badgeClass + '">' + section.title[currentLang] + '</span></div>';
+        html += '<ol class="space-y-4 text-sm">';
+        
+        section.questions.forEach((q) => {
+            html += '<li class="border-r-4 border-amber-400 pr-4 py-2" id="q-' + globalIdx + '">';
+            html += '<strong class="text-amber-700">' + (globalIdx + 1) + '.</strong> <span class="arabic-math">' + q.q[currentLang] + '</span><br>';
+            if (q.svg) html += '<div class="graph-container">' + q.svg + '</div>';
+            
+            q.options.forEach((opt, oIdx) => {
+                html += '<label class="cursor-pointer block mt-2 mr-4 hover:bg-amber-50 rounded-lg p-2 transition">';
+                html += '<input type="radio" name="q' + globalIdx + '" value="' + String.fromCharCode(97 + oIdx) + '" class="mr-2 ml-2">';
+                html += '<span class="arabic-math">' + lbl.option[oIdx] + ') ' + opt[currentLang] + '</span>';
+                html += '</label>';
+            });
+            
+            html += '<div class="answer-box text-green-700 mt-3 font-medium ' + (answersVisible ? '' : 'hidden') + ' bg-green-50 rounded-lg p-3 border border-green-200">';
+            html += lbl.answer + ' ' + lbl.option[q.correct] + ') <span class="arabic-math">' + q.options[q.correct][currentLang] + '</span><br>';
+            html += '<span class="text-sm text-green-700 mt-2 block arabic-math">' + q.answer[currentLang] + '</span>';
+            html += '</div></li>';
+            globalIdx++;
+        });
+        
+        html += '</ol></section>';
+    });
+    
+    container.innerHTML = html;
+}
+
+function startTimer() {
+    updateTimerDisplay();
+    timerInterval = setInterval(() => {
+        timeRemaining--;
+        updateTimerDisplay();
+        if (timeRemaining % 60 === 0) saveState(false);
+        if (timeRemaining <= 600) document.getElementById('timer').classList.add('timer-warning');
+        if (timeRemaining <= 0) {
+            clearInterval(timerInterval);
+            alert("⏰ انتهى الوقت!");
+            gradeExam();
+        }
+    }, 1000);
+}
+
+function updateTimerDisplay() {
+    const m = Math.floor(timeRemaining / 60);
+    const s = timeRemaining % 60;
+    document.getElementById('timer').textContent = m.toString().padStart(2,'0') + ':' + s.toString().padStart(2,'0');
+}
+
+function toggleAnswers() {
+    answersVisible = !answersVisible;
+    document.querySelectorAll('.answer-box').forEach(el => el.classList.toggle('hidden', !answersVisible));
+    saveState(false);
+}
+
+function gradeExam() {
+    let correctCount = 0;
+    const sectionScores = new Array(TOTAL_SECTIONS).fill(0);
+    
+    for (let i = 0; i < TOTAL_QUESTIONS; i++) {
+        const sel = document.querySelector('input[name="q'+i+'"]:checked');
+        const li = document.getElementById('q-' + i);
+        if (li) {
+            const isCorrect = sel && sel.value === correctAnswersMap[i];
+            if (isCorrect) {
+                correctCount++;
+                li.classList.add('correct');
+                li.classList.remove('incorrect');
+                sectionScores[Math.floor(i / QUESTIONS_PER_SECTION)]++;
+            } else {
+                li.classList.add('incorrect');
+                li.classList.remove('correct');
+            }
+        }
+    }
+    
+    const score = Math.round((correctCount / TOTAL_QUESTIONS) * 100);
+    document.getElementById('res-total').textContent = score + ' / 100';
+    document.getElementById('res-name').textContent = document.getElementById('studentName').value || 'بطل';
+    document.getElementById('res-date').textContent = new Date().toLocaleDateString('ar-AE');
+    
+    const pc = document.getElementById('sections-performance');
+    pc.innerHTML = '';
+    examData.sections.forEach((s, idx) => {
+        pc.innerHTML += '<div class="flex justify-between items-center p-3 bg-white rounded-lg"><span class="text-gray-700">' + s.title[currentLang] + '</span><span class="font-bold text-amber-700">' + sectionScores[idx] + '/' + QUESTIONS_PER_SECTION + '</span></div>';
+    });
+    
+    const badge = document.getElementById('success-badge');
+    document.getElementById('success-percent').textContent = score + '%';
+    
+    if (currentLang === 'ar') {
+        if (score >= 90) { badge.textContent = '🌟 ممتاز جداً!'; badge.className = 'success-badge grade-excellent'; }
+        else if (score >= 75) { badge.textContent = '👏 ممتاز!'; badge.className = 'success-badge grade-good'; }
+        else if (score >= 50) { badge.textContent = '👍 جيد'; badge.className = 'success-badge grade-pass'; }
+        else { badge.textContent = '💪 حاول مرة أخرى'; badge.className = 'success-badge grade-fail'; }
+    } else {
+        if (score >= 90) { badge.textContent = '🌟 Outstanding!'; badge.className = 'success-badge grade-excellent'; }
+        else if (score >= 75) { badge.textContent = '👏 Excellent!'; badge.className = 'success-badge grade-good'; }
+        else if (score >= 50) { badge.textContent = '👍 Good'; badge.className = 'success-badge grade-pass'; }
+        else { badge.textContent = '💪 Try Again'; badge.className = 'success-badge grade-fail'; }
+    }
+    
+    document.getElementById('results-panel').classList.remove('hidden');
+    document.getElementById('results-panel').scrollIntoView({ behavior: 'smooth' });
+    if (timerInterval) clearInterval(timerInterval);
+}
+
+function sendResultsToEmail() {
+    const btn = document.getElementById('sendEmailBtn');
+    const status = document.getElementById('emailStatus');
+    btn.disabled = true;
+    btn.textContent = '⏳ جاري الإرسال...';
+    
+    const name = document.getElementById('studentName').value || 'غير محدد';
+    const studentClass = document.getElementById('studentClass').value || 'غير محدد';
+    const date = document.getElementById('examDate').value || new Date().toLocaleDateString();
+    const score = document.getElementById('res-total').textContent;
+    const successRate = document.getElementById('success-percent').textContent;
+    const badge = document.getElementById('success-badge').textContent;
+    
+    let questionsHTML = '<table style="width:100%; border-collapse: collapse; font-family: Arial; font-size: 12px; direction: rtl;">';
+    questionsHTML += '<thead><tr style="background:#d97706; color:white;"><th style="padding:8px; border:1px solid #ddd;">#</th><th style="padding:8px; border:1px solid #ddd;">السؤال</th><th style="padding:8px; border:1px solid #ddd;">إجابة الطالب</th><th style="padding:8px; border:1px solid #ddd;">الصحيحة</th><th style="padding:8px; border:1px solid #ddd;">النتيجة</th></tr></thead><tbody>';
+    
+    let globalIdx = 0;
+    examData.sections.forEach((section) => {
+        questionsHTML += '<tr style="background:#fef3c7;"><td colspan="5" style="padding:8px; font-weight:bold; border:1px solid #ddd;">' + section.title.ar + '</td></tr>';
+        section.questions.forEach((q) => {
+            const sel = document.querySelector('input[name="q'+globalIdx+'"]:checked');
+            const sv = sel ? sel.value : null;
+            const cv = correctAnswersMap[globalIdx];
+            const ic = sv === cv;
+            let sat = '❌ لم يجب';
+            let sac = '#dc2626';
+            if (sv) {
+                const si = sv.charCodeAt(0) - 97;
+                sat = q.options[si].ar;
+                sac = ic ? '#16a34a' : '#dc2626';
+            }
+            const cat = q.options[q.correct].ar;
+            const rb = ic ? '#f0fdf4' : '#fef2f2';
+            questionsHTML += '<tr style="background:' + rb + ';"><td style="padding:8px; border:1px solid #ddd; text-align:center;">' + (globalIdx+1) + '</td><td style="padding:8px; border:1px solid #ddd;">' + q.q.ar + '</td><td style="padding:8px; border:1px solid #ddd; color:' + sac + ';">' + sat + '</td><td style="padding:8px; border:1px solid #ddd; color:#16a34a;">' + cat + '</td><td style="padding:8px; border:1px solid #ddd; text-align:center;">' + (ic?'✅':'❌') + '</td></tr>';
+            globalIdx++;
+        });
+    });
+    questionsHTML += '</tbody></table>';
+    
+    const templateParams = {
+        to_email: TARGET_EMAIL,
+        student_name: name,
+        student_class: studentClass,
+        exam_date: date,
+        total_score: score,
+        success_rate: successRate,
+        grade: badge,
+        answers_table: questionsHTML
+    };
+    
+    emailjs.send(SERVICE_ID, TEMPLATE_ID, templateParams)
+        .then(() => {
+            status.textContent = '✅ تم الإرسال بنجاح!';
+            status.style.color = '#16a34a';
+            btn.textContent = '✓ تم';
+            alert('تم إرسال النتيجة للمعلم بنجاح!');
+        })
+        .catch((error) => {
+            status.textContent = '❌ فشل الإرسال';
+            status.style.color = '#dc2626';
+            btn.disabled = false;
+            btn.textContent = '📧 حاول مرة أخرى';
+            alert('فشل الإرسال: ' + error.text);
+        });
+}
+
+window.addEventListener('DOMContentLoaded', () => {
+    const saved = loadState();
+    if (saved && saved.seed) {
+        currentSeed = saved.seed;
+        currentLang = saved.lang || 'ar';
+        timeRemaining = saved.timeRemaining !== undefined ? saved.timeRemaining : TOTAL_TIME;
+        answersVisible = saved.answersVisible || false;
+        document.getElementById('btn-ar').classList.toggle('active', currentLang === 'ar');
+        document.getElementById('btn-en').classList.toggle('active', currentLang === 'en');
+        document.body.classList.toggle('en-mode', currentLang === 'en');
+    } else {
+        currentSeed = Date.now();
+    }
+    prepareShuffledExam();
+    renderExam();
+    if (saved) {
+        if (saved.studentName) document.getElementById('studentName').value = saved.studentName;
+        if (saved.studentClass) document.getElementById('studentClass').value = saved.studentClass;
+        if (saved.examDate) document.getElementById('examDate').value = saved.examDate;
+        if (saved.answers) restoreAnswers(saved.answers);
+    }
+    setupAnswerListeners();
+    setupInputListeners();
+    startTimer();
+});
+window.addEventListener('beforeunload', () => saveState(false));
+</script>
+</body>
+</html>
